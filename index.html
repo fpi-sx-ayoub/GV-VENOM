@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="OMEGA DIRECTIVE SYSTEM - التحكم في الرقصات">
+    <title>OMEGA DIRECTIVE - LOGIN</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>Ω</text></svg>">
+    <style>
+        :root {
+            --primary-color: #8a2be2;
+            --secondary-color: #4b0082;
+            --accent-color: #9370db;
+            --dark-bg: #0a0a0a;
+            --glow-color: rgba(138, 43, 226, 0.6);
+            --success-color: #00ff88;
+            --error-color: #ff5555;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Arial', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(75, 0, 130, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(138, 43, 226, 0.1) 0%, transparent 50%),
+                linear-gradient(45deg, #000 0%, #0d0d0d 100%);
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M0,0 L100,100 M100,0 L0,100" stroke="rgba(138,43,226,0.03)" stroke-width="0.5"/></svg>'),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><circle cx="100" cy="100" r="80" fill="none" stroke="rgba(75,0,130,0.05)" stroke-width="2" stroke-dasharray="5,5"/></svg>');
+            background-size: 100px 100px, 200px 200px;
+            z-index: -1;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0, 0 0; }
+            100% { background-position: 100px 100px, 200px 200px; }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--accent-color);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Login Page Styles */
+        #loginPage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            padding: 20px;
+        }
+
+        .login-container {
+            background: linear-gradient(135deg, rgba(20, 20, 30, 0.95), rgba(30, 30, 40, 0.95));
+            padding: clamp(30px, 5vw, 50px);
+            border-radius: 25px;
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, var(--primary-color), var(--secondary-color)) 1;
+            box-shadow: 
+                0 0 60px var(--glow-color),
+                inset 0 0 40px rgba(0, 0, 0, 0.7);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            animation: loginAppear 0.8s ease-out;
+        }
+
+        @keyframes loginAppear {
+            0% { transform: scale(0.8) translateY(50px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .login-title {
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            margin-bottom: 30px;
+            background: linear-gradient(to right, #8a2be2, #9370db);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: 900;
+        }
+
+        .login-input-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .login-input-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+            font-weight: bold;
+            text-align: right;
+            letter-spacing: 1px;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        .login-input-group input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(20, 20, 30, 0.7);
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            color: #fff;
+            border-radius: 10px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: monospace;
+            direction: ltr;
+        }
+
+        .login-input-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 20px var(--glow-color);
+        }
+
+        .login-btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            color: white;
+            padding: 16px 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: clamp(1rem, 2vw, 1.1rem);
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.4);
+            width: 100%;
+            margin-top: 10px;
+            font-family: inherit;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.6);
+        }
+
+        .login-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Message Styles */
+        .message-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2000;
+            background: linear-gradient(135deg, rgba(20, 20, 30, 0.98), rgba(30, 30, 40, 0.98));
+            padding: clamp(30px, 5vw, 40px);
+            border-radius: 20px;
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, var(--primary-color), var(--accent-color)) 1;
+            box-shadow: 
+                0 0 50px var(--glow-color),
+                inset 0 0 30px rgba(0, 0, 0, 0.7);
+            text-align: center;
+            min-width: 300px;
+            max-width: 90vw;
+            display: none;
+            animation: messageAppear 0.5s ease-out;
+        }
+
+        @keyframes messageAppear {
+            0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        .message-title {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #8a2be2, #9370db);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+        }
+
+        .message-text {
+            color: var(--accent-color);
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            line-height: 1.5;
+        }
+
+        .loading-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(138, 43, 226, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Main Page Styles (hidden initially) */
+        #mainPage {
+            display: none;
+            min-height: 100vh;
+        }
+
+        header { 
+            text-align: center; 
+            padding: clamp(40px, 8vw, 60px) 20px; 
+            position: relative;
+        }
+
+        .omega-frame {
+            display: inline-block;
+            padding: clamp(20px, 4vw, 25px) clamp(40px, 8vw, 60px);
+            border: 4px solid transparent;
+            position: relative;
+            border-radius: 20px;
+            background: linear-gradient(45deg, var(--dark-bg), var(--dark-bg)) padding-box,
+                      linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color)) border-box;
+            box-shadow: 
+                0 0 40px var(--glow-color),
+                inset 0 0 40px rgba(0, 0, 0, 0.8);
+            animation: borderPulse 3s infinite;
+        }
+
+        @keyframes borderPulse {
+            0%, 100% { box-shadow: 0 0 40px var(--glow-color), inset 0 0 40px rgba(0,0,0,0.8); }
+            50% { box-shadow: 0 0 60px var(--glow-color), inset 0 0 40px rgba(0,0,0,0.8); }
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            margin: 0;
+            letter-spacing: 6px;
+            background: linear-gradient(to right, #8a2be2, #9370db, #4b0082);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-transform: uppercase;
+            font-weight: 900;
+            text-shadow: 
+                0 0 10px rgba(138, 43, 226, 0.5),
+                0 0 20px rgba(138, 43, 226, 0.3),
+                0 0 30px rgba(138, 43, 226, 0.2);
+            position: relative;
+        }
+
+        .title-sub {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: #9370db;
+            margin-top: 15px;
+            letter-spacing: 3px;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto 40px;
+            background: rgba(10, 10, 10, 0.85);
+            padding: clamp(20px, 4vw, 40px);
+            border: 2px solid transparent;
+            border-radius: 25px;
+            background-clip: padding-box;
+            border-image: linear-gradient(45deg, var(--primary-color), var(--secondary-color)) 1;
+            box-shadow: 
+                0 0 50px rgba(138, 43, 226, 0.2),
+                inset 0 0 30px rgba(0, 0, 0, 0.6);
+            position: relative;
+            backdrop-filter: blur(10px);
+            margin-inline: 20px;
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            border-radius: 27px;
+            z-index: -1;
+            opacity: 0.5;
+            filter: blur(10px);
+        }
+
+        .input-group { 
+            margin-bottom: 35px; 
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(147, 112, 219, 0.3);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 18px;
+            background: rgba(20, 20, 30, 0.7);
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            color: #fff;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.4s ease;
+            font-family: monospace;
+            direction: ltr;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 25px var(--glow-color);
+            background: rgba(25, 25, 35, 0.9);
+        }
+
+        .input-group::after {
+            content: "⚡";
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            color: var(--accent-color);
+            opacity: 0.5;
+            font-size: 1.2rem;
+        }
+
+        .id-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .btn-add {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            color: white;
+            padding: 0 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            min-width: 60px;
+            height: 56px;
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
+            font-family: inherit;
+            flex-shrink: 0;
+        }
+
+        .btn-add:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(138, 43, 226, 0.6);
+        }
+
+        .btn-add:active {
+            transform: scale(1.02);
+        }
+
+        .emotes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .emote-card {
+            background: rgba(30, 30, 40, 0.7);
+            border: 2px solid rgba(75, 0, 130, 0.5);
+            border-radius: 15px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .emote-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(138, 43, 226, 0.2), transparent);
+            transition: left 0.7s;
+        }
+
+        .emote-card:hover::before {
+            left: 100%;
+        }
+
+        .emote-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 
+                0 10px 30px rgba(138, 43, 226, 0.4),
+                0 0 20px rgba(138, 43, 226, 0.2);
+        }
+
+        .emote-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+            transition: all 0.3s ease;
+        }
+
+        .emote-card:hover img {
+            filter: drop-shadow(0 8px 20px rgba(138, 43, 226, 0.3));
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(15px);
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(20, 20, 30, 0.95), rgba(30, 30, 40, 0.95));
+            padding: clamp(30px, 5vw, 60px);
+            border-radius: 30px;
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, var(--primary-color), var(--accent-color)) 1;
+            text-align: center;
+            box-shadow: 
+                0 0 80px var(--glow-color),
+                inset 0 0 50px rgba(0, 0, 0, 0.7);
+            animation: modalAppear 0.5s ease-out;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        @keyframes modalAppear {
+            0% { transform: scale(0.5) rotateX(-90deg); opacity: 0; }
+            100% { transform: scale(1) rotateX(0); opacity: 1; }
+        }
+
+        .modal-content h2 {
+            background: linear-gradient(to right, #8a2be2, #9370db);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin: 0;
+            letter-spacing: 4px;
+        }
+
+        .modal-content p {
+            color: var(--accent-color);
+            margin-top: 25px;
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(147, 112, 219, 0.3);
+            line-height: 1.5;
+        }
+
+        .btn-close {
+            margin-top: 40px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            padding: 16px 50px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: white;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 25px rgba(138, 43, 226, 0.4);
+            font-family: inherit;
+        }
+
+        .btn-close:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 35px rgba(138, 43, 226, 0.6);
+        }
+
+        .btn-close:active {
+            transform: translateY(-1px);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: rgba(147, 112, 219, 0.5);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            border-top: 1px solid rgba(75, 0, 130, 0.3);
+            margin-top: 40px;
+            background: rgba(10, 10, 10, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .emotes-grid {
+                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+                gap: 15px;
+            }
+            
+            .id-container {
+                flex-direction: column;
+            }
+            
+            .btn-add {
+                width: 100%;
+                height: 50px;
+                margin-top: 10px;
+            }
+            
+            .omega-frame {
+                padding: 20px 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin-inline: 15px;
+                padding: 20px;
+            }
+            
+            .login-container {
+                padding: 25px 20px;
+            }
+            
+            h1 {
+                letter-spacing: 3px;
+            }
+        }
+
+        /* Accessiblity */
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Focus styles for accessibility */
+        button:focus-visible,
+        input:focus-visible {
+            outline: 3px solid var(--accent-color);
+            outline-offset: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Login Page -->
+    <div id="loginPage">
+        <div class="login-container">
+            <h1 class="login-title">𝚶𝐌𝐄𝐆𝐀</h1>
+            <div class="title-sub" style="margin-bottom: 40px;">𝐀𝐂𝐂𝐄𝐒𝐒 𝐂𝐎𝐍𝐓𝐑𝐎𝐋</div>
+            
+            <div class="login-input-group">
+                <label for="username">𝐔𝐒𝐄𝐑𝐍𝐀𝐌𝐄</label>
+                <input type="text" id="username" placeholder="𝐄𝐗: 𝐅𝐏𝐈 𝐒𝐗 𝐀𝐘𝐎𝐔𝐁" aria-label="Username">
+            </div>
+            
+            <div class="login-input-group">
+                <label for="password">𝐏𝐀𝐒𝐒𝐖𝐎𝐑𝐃</label>
+                <input type="password" id="password" placeholder="𝐄𝐗: 𝐅𝐏𝐈 𝐒𝐗 𝐀𝐘𝐎𝐔𝐁" aria-label="Password">
+            </div>
+            
+            <button class="login-btn" id="loginBtn" onclick="login()" aria-label="Login button">𝐋𝐎𝐆𝐈𝐍</button>
+        </div>
+    </div>
+
+    <!-- Message Container -->
+    <div id="messageContainer" class="message-container" role="alert" aria-live="polite">
+        <h2 class="message-title" id="messageTitle">𝐕𝐄𝐑𝐈𝐅𝐘𝐈𝐍𝐆</h2>
+        <p class="message-text" id="messageText">𝐂𝐡𝐞𝐜𝐤𝐢𝐧𝐠 𝐜𝐫𝐞𝐝𝐞𝐧𝐭𝐢𝐚𝐥𝐬...</p>
+        <div class="loading-bar" aria-hidden="true">
+            <div class="loading-progress" id="loadingProgress"></div>
+        </div>
+    </div>
+
+    <!-- Main Page (hidden initially) -->
+    <div id="mainPage">
+        <div class="particles" id="particles"></div>
+
+        <header>
+            <div class="omega-frame">
+                <h1>𝚶𝐌𝐄𝐆𝐀</h1>
+                <div class="title-sub">𝐃𝐈𝐑𝐄𝐂𝐓𝐈𝐕𝐄</div>
+            </div>
+        </header>
+
+        <main class="container">
+            <div class="input-group">
+                <label for="teamCode">𝐄𝐍𝐓𝐄𝐑 𝐓𝐄𝐀𝐌 𝐂𝐎𝐃𝐄</label>
+                <input type="text" id="teamCode" placeholder="𝐄𝐗 : 𝟒𝟎𝟒𝟔𝟒𝟓𝟓" aria-label="Team code">
+            </div>
+
+            <div class="input-group">
+                <label>𝐄𝐍𝐓𝐄𝐑 𝐈𝐃 𝐏𝐋𝐀𝐘𝐄𝐑</label>
+                <div id="idInputs">
+                    <div class="id-container">
+                        <input type="text" class="player-id" placeholder="𝐄𝐗 : 𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖" aria-label="Player ID">
+                        <button class="btn-add" onclick="addNewIdInput()" aria-label="Add another player ID">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <p style="text-align: center; color: var(--accent-color); letter-spacing: 2px; font-size: 1.1rem; margin: 30px 0;">
+                𝐒𝐄𝐋𝐄𝐂𝐓 𝐄𝐌𝐎𝐓𝐄 𝐓𝐎 𝐀𝐂𝐓𝐈𝐕𝐀𝐓𝐄 𝐃𝐈𝐑𝐄𝐂𝐓𝐋𝐘
+            </p>
+            
+            <div class="emotes-grid" id="emotesGrid" role="grid"></div>
+        </main>
+
+        <div id="successModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="modal-content">
+                <h2 id="modalTitle">DIRECTIVE ACTIVE</h2>
+                <p>​✅ 𝐄𝐌𝐎𝐓𝐄 𝐃𝐈𝐒𝐏𝐀𝐓𝐂𝐇𝐄𝐃 𝐒𝐔𝐂𝐂𝐄𝐒𝐒𝐔𝐋𝐋𝐘</p>
+                <button class="btn-close" onclick="closeModal()" aria-label="Close modal">ACKNOWLEDGE</button>
+            </div>
+        </div>
+
+        <footer class="footer">
+            OMEGA DIRECTIVE SYSTEM v2.0 | SECURITY LEVEL: OMICRON | USER: <span id="loggedUser"></span>
+        </footer>
+    </div>
+
+    <script>
+        // Credentials
+        const VALID_USERNAME = "FPI SX AYOUB";
+        const VALID_PASSWORD = "FPI SX AYOUB";
+
+        // Login function
+        function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const loginBtn = document.getElementById('loginBtn');
+            
+            if (!username || !password) {
+                showMessage('𝐄𝐑𝐑𝐎𝐑', '𝐏𝐥𝐞𝐚𝐬𝐞 𝐞𝐧𝐭𝐞𝐫 𝐛𝐨𝐭𝐡 𝐮𝐬𝐞𝐫𝐧𝐚𝐦𝐞 𝐚𝐧𝐝 𝐩𝐚𝐬𝐬𝐰𝐨𝐫𝐝', 'error');
+                return;
+            }
+            
+            loginBtn.disabled = true;
+            loginBtn.textContent = '𝐕𝐄𝐑𝐈𝐅𝐘𝐈𝐍𝐆...';
+            
+            // Show verification message
+            showMessage('𝐕𝐄𝐑𝐈𝐅𝐘𝐈𝐍𝐆', '𝐂𝐡𝐞𝐜𝐤𝐢𝐧𝐠 𝐜𝐫𝐞𝐝𝐞𝐧𝐭𝐢𝐚𝐥𝐬...', 'verifying');
+            
+            // Simulate verification delay
+            setTimeout(() => {
+                if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+                    // Success
+                    showMessage('𝐒𝐔𝐂𝐂𝐄𝐒𝐒', '𝐋𝐨𝐠𝐢𝐧 𝐬𝐮𝐜𝐜𝐞𝐬𝐬𝐟𝐮𝐥! 𝐑𝐞𝐝𝐢𝐫𝐞𝐜𝐭𝐢𝐧𝐠...', 'success');
+                    
+                    // Hide login page after 7 seconds
+                    setTimeout(() => {
+                        document.getElementById('loginPage').style.display = 'none';
+                        
+                        // Show redirection message
+                        showMessage('𝐑𝐄𝐃𝐈𝐑𝐄𝐂𝐓𝐈𝐍𝐆', '𝐘𝐨𝐮 𝐰𝐢𝐥𝐥 𝐛𝐞 𝐫𝐞𝐝𝐢𝐫𝐞𝐜𝐭𝐞𝐝 𝐭𝐨 𝐭𝐡𝐞 𝐦𝐚𝐢𝐧 𝐩𝐚𝐠𝐞 𝐢𝐧 𝟏𝟎 𝐬𝐞𝐜𝐨𝐧𝐝𝐬...', 'redirect');
+                        
+                        // Redirect to main page after 10 seconds
+                        setTimeout(() => {
+                            document.getElementById('messageContainer').style.display = 'none';
+                            document.getElementById('mainPage').style.display = 'block';
+                            document.getElementById('loggedUser').textContent = username;
+                            initMainPage();
+                        }, 10000);
+                    }, 7000);
+                } else {
+                    // Failure
+                    showMessage('𝐅𝐀𝐈𝐋𝐔𝐑𝐄', '𝐈𝐧𝐯𝐚𝐥𝐢𝐝 𝐮𝐬𝐞𝐫𝐧𝐚𝐦𝐞 𝐨𝐫 𝐩𝐚𝐬𝐬𝐰𝐨𝐫𝐝', 'error');
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = '𝐋𝐎𝐆𝐈𝐍';
+                }
+            }, 2000);
+        }
+
+        // Show message function
+        function showMessage(title, text, type) {
+            const messageContainer = document.getElementById('messageContainer');
+            const messageTitle = document.getElementById('messageTitle');
+            const messageText = document.getElementById('messageText');
+            const loadingProgress = document.getElementById('loadingProgress');
+            
+            messageTitle.textContent = title;
+            messageText.textContent = text;
+            
+            // Set colors based on type
+            switch(type) {
+                case 'success':
+                    messageTitle.style.background = 'linear-gradient(to right, #00ff88, #00cc66)';
+                    break;
+                case 'error':
+                    messageTitle.style.background = 'linear-gradient(to right, #ff5555, #ff0000)';
+                    break;
+                case 'verifying':
+                    messageTitle.style.background = 'linear-gradient(to right, #9370db, #8a2be2)';
+                    break;
+                case 'redirect':
+                    messageTitle.style.background = 'linear-gradient(to right, #ffaa00, #ff8800)';
+                    break;
+            }
+            
+            messageContainer.style.display = 'block';
+            loadingProgress.style.width = '0%';
+            
+            // Announce message for screen readers
+            messageContainer.setAttribute('aria-label', `${title}. ${text}`);
+            
+            // Animate progress bar based on type
+            let duration = 7000; // 7 seconds for verification
+            if (type === 'redirect') duration = 10000; // 10 seconds for redirect
+            
+            let startTime = Date.now();
+            function updateProgress() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min((elapsed / duration) * 100, 100);
+                loadingProgress.style.width = progress + '%';
+                
+                if (progress < 100) {
+                    requestAnimationFrame(updateProgress);
+                }
+            }
+            requestAnimationFrame(updateProgress);
+        }
+
+        // Initialize main page
+        function initMainPage() {
+            createParticles();
+            loadEmotes();
+            // Set focus to team code input
+            setTimeout(() => document.getElementById('teamCode')?.focus(), 100);
+        }
+
+        // Create particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            const particleCount = Math.min(50, Math.floor(window.innerWidth / 20));
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const size = Math.random() * 5 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.animationDelay = `${Math.random() * 20}s`;
+                particle.style.animationDuration = `${15 + Math.random() * 20}s`;
+                container.appendChild(particle);
+            }
+        }
+
+        // Load all emotes (ALL OF THEM - بدون حذف أي واحدة)
+        function loadEmotes() {
+            const grid = document.getElementById('emotesGrid');
+            if (!grid) return;
+            
+            grid.innerHTML = '';
+            
+            // ALL IDS - كل الرقصات موجودة بدون حذف
+            const rawIds = [
+                "909000001", "909000002", "909000003", "909000004", "909000005", "909000006", "909000007", "909000008", "909000009", "909000010",
+                "909000011", "909000012", "909000013", "909000014", "909000015", "909000016", "909000017", "909000018", "909000019", "909000020",
+                "909000021", "909000022", "909000023", "909000024", "909000025", "909000026", "909000027", "909000028", "909000029", "909000031",
+                "909000032", "909000033", "909000034", "909000035", "909000036", "909000037", "909000038", "909000039", "909000040", "909000041",
+                "909000042", "909000043", "909000044", "909000045", "909000046", "909000047", "909000048", "909000049", "909000051", "909000052",
+                "909000053", "909000054", "909000055", "909000079", "909000080", "909000081", "909000082", "909000083", "909000084", "909000085",
+                "909000086", "909000087", "909000088", "909000089", "909000090", "909000091", "909000092", "909000093", "909000094", "909000095",
+                "909000096", "909000097", "909000098", "909000099", "909000100", "909000101", "909000102", "909000103", "909000104", "909000105",
+                "909000106", "909000107", "909000108", "909000109", "909000110", "909000111", "909000112", "909000113", "909000114", "909000115",
+                "909000116", "909000117", "909000118", "909000119", "909000120", "909000121", "909000122", "909000123", "909000124", "909000125",
+                "909000126", "909000127", "909000128", "909000129", "909000130", "909000131", "909000132", "909000133", "909000134", "909000135",
+                "909000136", "909000137", "909000138", "909000139", "909000140", "909000141", "909000142", "909000143", "909000144", "909000145",
+                "909000150", "909033001", "909033002", "909033003", "909033004", "909033005", "909033006", "909033007", "909033008", "909033009",
+                "909033010", "909034001", "909034002", "909034003", "909034004", "909034005", "909034006", "909034007", "909034008", "909034009",
+                "909034010", "909034011", "909034012", "909034013", "909034014", "909035001", "909035002", "909035003", "909035004", "909035005",
+                "909035006", "909035007", "909035008", "909035009", "909035010", "909035011", "909035012", "909035013", "909035014", "909035015",
+                "909036001", "909036002", "909036003", "909036004", "909036005", "909036006", "909036008", "909036009", "909036010", "909036011",
+                "909036012", "909036014", "909037001", "909037002", "909037003", "909037004", "909037005", "909037006", "909037007", "909037008",
+                "909037009", "909037010", "909037011", "909037012", "909038001", "909038002", "909038003", "909038004", "909038005", "909038006",
+                "909038008", "909038009", "909038010", "909038011", "909038012", "909038013", "909039001", "909039002", "909039003", "909039004",
+                "909039005", "909039006", "909039007", "909039008", "909039009", "909039010", "909039011", "909039012", "909039013", "909039014",
+                "909040001", "909040002", "909040003", "909040004", "909040005", "909040006", "909040008", "909040009", "909040010", "909040011",
+                "909040012", "909040013", "909041001", "909041002", "909041003", "909041004", "909041005", "909041006", "909041007", "909041008",
+                "909041009", "909041010", "909041011", "909041012", "909041013", "909041014", "909041015", "909042001", "909042002", "909042003",
+                "909042004", "909042005", "909042006", "909042007", "909042008", "909042009", "909042011", "909042012", "909042013", "909042016",
+                "909042017", "909042018", "909043001", "909043002", "909043003", "909043004", "909043005", "909043006", "909043007", "909043008",
+                "909043009", "909043010", "909043013", "909044001", "909044002", "909044003", "909044004", "909044005", "909044006", "909044007",
+                "909044008", "909044009", "909044010", "909044011", "909044012", "909044015", "909044016", "909045001", "909045002", "909045003",
+                "909045004", "909045005", "909045006", "909045007", "909045008", "909045009", "909045010", "909045011", "909045012", "909045015",
+                "909045016", "909045017", "909046001", "909046002", "909046003", "909046004", "909046005", "909046006", "909046007", "909046008",
+                "909046009", "909046010", "909046011", "909046012", "909046013", "909046014", "909046015", "909046016", "909046017", "909047001",
+                "909047002", "909047003", "909047004", "909047005", "909047006", "909047007", "909047008", "909047009", "909047010", "909047011",
+                "909047012", "909047013", "909047015", "909047016", "909047017", "909047018", "909047019", "909048001", "909048002", "909048003",
+                "909048004", "909048005", "909048006", "909048007", "909048008", "909048009", "909048010", "909048011", "909048012", "909048013",
+                "909048014", "909048015", "909048016", "909048017", "909048018", "909049001", "909049002", "909049003", "909049004", "909049005",
+                "909049006", "909049007", "909049008", "909049009", "909049010", "909049011", "909049012", "909049013", "909049014", "909049015",
+                "909049016", "909049017", "909049018", "909049019", "909049020", "909049021", "909050002", "909050003", "909050004", "909050005",
+                "909050006", "909050008", "909050009", "909050010", "909050011", "909050012", "909050013", "909050014", "909050015", "909050016",
+                "909050017", "909050018", "909050019", "909050020", "909050021", "914047001", "914047002", "914048001", "914050001"
+            ];
+
+            const uniqueEmotes = [...new Set(rawIds)];
+            
+            // إنشاء كل البطاقات بدون حذف أي واحدة
+            uniqueEmotes.forEach((id, index) => {
+                const card = document.createElement('div');
+                card.className = 'emote-card';
+                card.role = 'gridcell';
+                card.tabIndex = 0;
+                card.setAttribute('aria-label', `Emote ${id}`);
+                card.innerHTML = `<img src="https://cdn.jsdelivr.net/gh/ShahGCreator/icon@main/PNG/${id}.png" loading="lazy" alt="Emote ${id}" onerror="this.style.display='none'">`;
+                
+                card.onclick = () => sendDance(id);
+                card.onkeypress = (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        sendDance(id);
+                    }
+                };
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // Add new ID input
+        function addNewIdInput() {
+            const container = document.getElementById('idInputs');
+            if(container && container.getElementsByClassName('id-container').length < 5) {
+                const div = document.createElement('div');
+                div.className = 'id-container';
+                const inputCount = container.getElementsByClassName('id-container').length + 1;
+                div.innerHTML = `<input type="text" class="player-id" placeholder="Enter Player ID ${inputCount}" aria-label="Player ID ${inputCount}">`;
+                container.appendChild(div);
+                // Focus the new input
+                setTimeout(() => div.querySelector('input')?.focus(), 10);
+            }
+        }
+
+        // Send dance function
+        function sendDance(emoteId) {
+            const tc = document.getElementById('teamCode')?.value;
+            const ids = Array.from(document.getElementsByClassName('player-id')).map(i => i.value);
+            
+            if(!tc || !ids[0]) { 
+                showMessage('𝐄𝐑𝐑𝐎𝐑', 'OMEGA DIRECTIVE: Enter Team Code and Player ID!', 'error');
+                return; 
+            }
+
+            let url = `http://217.160.125.125:13699/join?tc=${tc}`;
+            ids.forEach((id, index) => { if(id) url += `&uid${index+1}=${id}`; });
+            url += `&emote_id=${emoteId}`;
+
+            showModal();
+            
+            // Play a subtle sound effect
+            try {
+                const audio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQ=');
+                audio.volume = 0.1;
+                audio.play().catch(() => {});
+            } catch (e) {}
+            
+            // Send request
+            fetch(url, { mode: 'no-cors' })
+                .catch(() => {})
+                .finally(() => {
+                    // Log the action
+                    console.log(`OMEGA DIRECTIVE: Sent emote ${emoteId} to team ${tc}`);
+                });
+        }
+
+        // Show modal
+        function showModal() { 
+            const modal = document.getElementById('successModal');
+            if(modal) {
+                modal.style.display = 'flex';
+                modal.setAttribute('aria-hidden', 'false');
+                // Focus the close button for accessibility
+                setTimeout(() => modal.querySelector('.btn-close')?.focus(), 100);
+            }
+        }
+        
+        // Close modal
+        function closeModal() { 
+            const modal = document.getElementById('successModal');
+            if(modal) {
+                modal.style.display = 'none';
+                modal.setAttribute('aria-hidden', 'true');
+            }
+        }
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+                return;
+            }
+            
+            if (e.ctrlKey && e.key === 'Enter') {
+                const firstEmote = document.querySelector('.emote-card');
+                if (firstEmote) firstEmote.click();
+                return;
+            }
+            
+            if (e.key === 'Enter' && document.getElementById('loginPage').style.display !== 'none') {
+                login();
+                return;
+            }
+            
+            // Navigation between inputs in main page
+            if (document.getElementById('mainPage').style.display === 'block') {
+                if (e.key === 'Tab' && !e.shiftKey) {
+                    const inputs = document.querySelectorAll('input, button');
+                    const focused = document.activeElement;
+                    const focusedIndex = Array.from(inputs).indexOf(focused);
+                    
+                    if (focusedIndex === inputs.length - 1) {
+                        e.preventDefault();
+                        inputs[0]?.focus();
+                    }
+                }
+            }
+        });
+
+        // Handle window resize
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(createParticles, 250);
+        });
+
+        // Auto-focus username input on page load
+        window.addEventListener('load', function() {
+            document.getElementById('username').focus();
+            
+            // Initialize service worker if supported (for PWA)
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js').catch(() => {});
+            }
+        });
+
+        // Prevent context menu on images
+        document.addEventListener('contextmenu', (e) => {
+            if (e.target.tagName === 'IMG') {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
