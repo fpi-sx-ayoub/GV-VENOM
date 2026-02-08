@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, vipUsers, InsertVipUser, VipUser, adminCredentials, InsertAdminCredential, apiLogs, InsertApiLog } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,104 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+/**
+ * VIP User queries
+ */
+export async function getVipUserByUsername(username: string): Promise<VipUser | undefined> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get VIP user: database not available");
+    return undefined;
+  }
+
+  const result = await db.select().from(vipUsers).where(eq(vipUsers.username, username)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function createVipUser(user: InsertVipUser): Promise<VipUser | undefined> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot create VIP user: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db.insert(vipUsers).values(user);
+    const insertedUser = await getVipUserByUsername(user.username);
+    return insertedUser;
+  } catch (error) {
+    console.error("[Database] Failed to create VIP user:", error);
+    throw error;
+  }
+}
+
+export async function getAllVipUsers(): Promise<VipUser[]> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get VIP users: database not available");
+    return [];
+  }
+
+  return await db.select().from(vipUsers);
+}
+
+export async function deleteVipUser(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot delete VIP user: database not available");
+    return;
+  }
+
+  await db.delete(vipUsers).where(eq(vipUsers.id, id));
+}
+
+/**
+ * Admin credentials queries
+ */
+export async function getAdminCredentials(): Promise<InsertAdminCredential | undefined> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get admin credentials: database not available");
+    return undefined;
+  }
+
+  const result = await db.select().from(adminCredentials).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function initializeAdminCredentials(username: string, passwordHash: string): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot initialize admin credentials: database not available");
+    return;
+  }
+
+  try {
+    const existing = await getAdminCredentials();
+    if (!existing) {
+      await db.insert(adminCredentials).values({
+        username,
+        passwordHash,
+      });
+    }
+  } catch (error) {
+    console.error("[Database] Failed to initialize admin credentials:", error);
+  }
+}
+
+/**
+ * API Logs queries
+ */
+export async function createApiLog(log: InsertApiLog): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot create API log: database not available");
+    return;
+  }
+
+  try {
+    await db.insert(apiLogs).values(log);
+  } catch (error) {
+    console.error("[Database] Failed to create API log:", error);
+  }
+}
