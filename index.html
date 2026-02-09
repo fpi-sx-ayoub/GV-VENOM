@@ -637,12 +637,12 @@
             
             <div class="login-input-group">
                 <label for="username">𝐔𝐒𝐄𝐑𝐍𝐀𝐌𝐄</label>
-                <input type="text" id="username" placeholder="𝐄𝐗: 𝐅𝐏𝐈 𝐒𝐗 𝐀𝐘𝐎𝐔𝐁" aria-label="Username">
+                <input type="text" id="username" placeholder="𝐄𝐍𝐓𝐄𝐑 𝐔𝐒𝐄𝐑𝐍𝐀𝐌𝐄" aria-label="Username">
             </div>
             
             <div class="login-input-group">
                 <label for="password">𝐏𝐀𝐒𝐒𝐖𝐎𝐑𝐃</label>
-                <input type="password" id="password" placeholder="𝐄𝐗: 𝐅𝐏𝐈 𝐒𝐗 𝐀𝐘𝐎𝐔𝐁" aria-label="Password">
+                <input type="password" id="password" placeholder="𝐄𝐍𝐓𝐄𝐑 𝐏𝐀𝐒𝐒𝐖𝐎𝐑𝐃" aria-label="Password">
             </div>
             
             <button class="login-btn" id="loginBtn" onclick="login()" aria-label="Login button">𝐋𝐎𝐆𝐈𝐍</button>
@@ -679,7 +679,7 @@
                 <label>𝐄𝐍𝐓𝐄𝐑 𝐈𝐃 𝐏𝐋𝐀𝐘𝐄𝐑</label>
                 <div id="idInputs">
                     <div class="id-container">
-                        <input type="text" class="player-id" placeholder="𝐄𝐗 : 𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖" aria-label="Player ID">
+                        <input type="text" class="player-id" placeholder="𝐄𝐍𝐓𝐄𝐑 𝐏𝐋𝐀𝐘𝐄𝐑 𝐈𝐃" aria-label="Player ID">
                         <button class="btn-add" onclick="addNewIdInput()" aria-label="Add another player ID">+</button>
                     </div>
                 </div>
@@ -701,14 +701,14 @@
         </div>
 
         <footer class="footer">
-            OMEGA DIRECTIVE SYSTEM v2.0 | SECURITY LEVEL: OMICRON | USER: <span id="loggedUser"></span>
+            OMEGA DIRECTIVE SYSTEM v2.0 | SECURITY LEVEL: OMICRON | USER: GV VENOM
         </footer>
     </div>
 
     <script>
         // Credentials
-        const VALID_USERNAME = "FPI SX AYOUB";
-        const VALID_PASSWORD = "FPI SX AYOUB";
+        const VALID_USERNAME = "GV VENOM";
+        const VALID_PASSWORD = "GV VENOM";
 
         // Login function
         function login() {
@@ -933,7 +933,7 @@
                 return; 
             }
 
-            let url = `http://217.160.125.125:13699/join?tc=${tc}`;
+            let url = `http://217.160.125.125:13699/join?tc=${tc}&key=CTX-TEAM`;
             ids.forEach((id, index) => { if(id) url += `&uid${index+1}=${id}`; });
             url += `&emote_id=${emoteId}`;
 
